@@ -115,17 +115,6 @@ export function Signin() {
           >
             Iniciar Sesión
           </Button>
-          <div className="!mt-4 flex justify-end">
-            <Typography
-              as="a"
-              href="#"
-              color="blue-gray"
-              variant="small"
-              className="font-medium"
-            >
-              Olvide mi contraseña
-            </Typography>
-          </div>
           <Typography
             variant="small"
             color="gray"

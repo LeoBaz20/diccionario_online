@@ -4,6 +4,7 @@ import {
   Dialog,
 } from "../MaterialTailwind";
 
+import { SpeakerWaveIcon } from '@heroicons/react/24/solid';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { AddWord } from '@/components/words/AddAword'
@@ -24,24 +25,37 @@ export const WordPage = ({ definition }) => {
     }
   };
 
+  // Función para reproducir el audio
+  const playAudio = (audioUrl) => {
+    const audio = new Audio(audioUrl);
+    audio.play();
+  };
+
+    // Función para manejar el clic en el botón de volumen
+    const handleVolumeClick = () => {
+      if (phonetics.length > 0 && phonetics[0].audio) {
+        playAudio(phonetics[0].audio); // Reproduce el primer audio disponible
+      }
+    };
 
   return (
     <div className="min-h-screen bg-white text-black p-16">
       <div className="max-w-4xl mx-auto">
         <header className="text-left mb-12 flex items-center">
           <h1 className="text-6xl font-bold">{definition.word}</h1>
-          <div className="ml-4">
-          <IconButton onClick={handleOpen} color="black" variant="outlined" size="lg">
-          <i className="fas fa-star" />
-        </IconButton>
-        <Dialog
-                  size="xs"
-                  open={open}
-                  handler={handleOpen}
-                  className="bg-transparent shadow-none"
-          >
-          <AddWord word={definition.word} onClose={handleOpen}/>
-          </Dialog>
+          <div className="ml-4 space-x-2">
+            <IconButton onClick={handleVolumeClick} color="black" variant="outlined" size="lg"><i class="fa-solid fa-volume-high" ></i></IconButton>
+            <IconButton onClick={handleOpen} color="black" variant="outlined" size="lg">
+              <i className="fas fa-star" />
+            </IconButton>
+            <Dialog
+              size="xs"
+              open={open}
+              handler={handleOpen}
+              className="bg-transparent shadow-none"
+            >
+              <AddWord word={definition.word} onClose={handleOpen} />
+            </Dialog>
           </div>
         </header>
         <main className="grid grid-cols-3 gap-8">
@@ -58,7 +72,7 @@ export const WordPage = ({ definition }) => {
                         <span className="text-gray-600">sinónimos: </span>
                         {def.synonyms.map((synonym, idx) => (
                           <span key={idx}>
-                            <a href={`/${synonym}`} className="text-blue-500">{synonym}</a>
+                            <a href={`/search/${synonym}`} className="text-blue-500">{synonym}</a>
                             {idx < def.synonyms.length - 1 && ', '}
                           </span>
                         ))}
@@ -75,17 +89,6 @@ export const WordPage = ({ definition }) => {
               {phonetics.map((phonetic, index) => (
                 <div key={index} className="mb-8">
                   <p className="text-2xl">{phonetic.text}</p>
-                  {phonetic.audio && (
-                    <audio controls>
-                      <source src={phonetic.audio} type="audio/mpeg" />
-                      Your browser does not support the audio element.
-                    </audio>
-                  )}
-                  {phonetic.sourceUrl && (
-                    <p className="text-sm text-gray-600">
-                      Source: <a href={phonetic.sourceUrl} target="_blank" className="text-blue-500">Link</a>
-                    </p>
-                  )}
                 </div>
               ))}
             </div>
