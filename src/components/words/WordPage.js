@@ -58,7 +58,7 @@ export const WordPage = ({ definition }) => {
             </Dialog>
           </div>
         </header>
-        <main className="grid grid-cols-3 gap-8">
+        <main className="grid grid-cols-2 gap-6">
           <section className="col-span-2">
             {meanings.map((meaning, index) => (
               <div key={index} className={`mb-8 ${index < meanings.length - 1 ? 'pb-8 border-b border-gray-300' : ''}`}>

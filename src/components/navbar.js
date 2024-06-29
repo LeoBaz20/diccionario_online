@@ -22,7 +22,7 @@ const NAV_MENU = [
   {
     name: "Traductor",
     icon: LanguageIcon,
-    href: "/translatePage",
+    href: "/translate",
   },
   {
     name: "Listas",

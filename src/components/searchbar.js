@@ -37,8 +37,9 @@ export function SearchBar() {
         size="sm"
         className="!absolute right-1 top-1 rounded"
         type="submit"
+        color="light-blue"
       >
-        Buscar
+Buscar
       </Button>
         </form>
       </div>
