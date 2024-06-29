@@ -39,11 +39,11 @@ export const WordPage = ({ definition }) => {
     };
 
   return (
-    <div className="min-h-screen bg-white text-black p-16">
+    <div className="min-h-screen bg-white text-black p-12">
       <div className="max-w-4xl mx-auto">
-        <header className="text-left mb-12 flex items-center">
-          <h1 className="text-6xl font-bold">{definition.word}</h1>
-          <div className="ml-4 space-x-2">
+        <header className="text-left mb-10 flex">
+          <h1 className="text-5xl font-bold">{definition.word}</h1>
+          <div className="ml-4 flex space-x-2 md:inline-block">
             <IconButton onClick={handleVolumeClick} color="black" variant="outlined" size="lg"><i class="fa-solid fa-volume-high" ></i></IconButton>
             <IconButton onClick={handleOpen} color="black" variant="outlined" size="lg">
               <i className="fas fa-star" />
@@ -65,7 +65,7 @@ export const WordPage = ({ definition }) => {
                 <h2 className="text-lg text-gray-600">{meaning.partOfSpeech}</h2>
                 {meaning.definitions.map((def, idx) => (
                   <div key={idx} className="mb-4">
-                    <p className="text-2xl">{idx + 1}. {def.definition}</p>
+                    <p className="text-1xl">{idx + 1}. {def.definition}</p>
                     {def.example && <p className="italic text-gray-600">"{def.example}"</p>}
                     {def.synonyms && def.synonyms.length > 0 && (
                       <p className="mt-4">
@@ -88,7 +88,7 @@ export const WordPage = ({ definition }) => {
               <h2 className="text-lg text-gray-600">Phonetics</h2>
               {phonetics.map((phonetic, index) => (
                 <div key={index} className="mb-8">
-                  <p className="text-2xl">{phonetic.text}</p>
+                  <p className="text-1xl">{phonetic.text}</p>
                 </div>
               ))}
             </div>
