@@ -14,6 +14,8 @@ import {
   UserCircleIcon,
   XMarkIcon,
   Bars3Icon,
+  UserPlusIcon,
+  ArrowRightEndOnRectangleIcon
 } from "@heroicons/react/24/solid";
 
 const NAV_MENU = [
@@ -139,6 +141,15 @@ export function Navbar() {
                 {name}
               </NavItem>
             ))}
+            {session ? (
+              <>
+              </>
+            ) : (
+              <>
+                <NavItem href="/signin"><ArrowRightEndOnRectangleIcon className="h-5 w-5"/>Iniciar Sesión</NavItem>
+                <NavItem href="/signup"><UserPlusIcon className="h-5 w-5"/>Registrarse</NavItem>
+              </>
+            )}
           </ul>
         </div>
       </Collapse>

@@ -22,7 +22,7 @@ export function SearchBar() {
         <form onSubmit={handleSubmit} className="relative flex w-full max-w-lg gap-2">
           <Input
             type="text"
-            placeholder="Buscar en el diccionario"
+            placeholder="Escribe cualquier palabra"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             containerProps={{
@@ -33,9 +33,13 @@ export function SearchBar() {
               className: "before:content-none after:content-none",
             }}
           />
-          <Button size="sm" className="rounded-lg flex items-center" type="submit">
-            <MagnifyingGlassIcon className="h-4 w-4 mr-1" />
-          </Button>
+          <Button
+        size="sm"
+        className="!absolute right-1 top-1 rounded"
+        type="submit"
+      >
+        Buscar
+      </Button>
         </form>
       </div>
     </Navbar>
