@@ -4,8 +4,7 @@ import { useRouter } from "next/navigation";
 import {
   Typography,
   Input,
-  Button,
-  Alert
+  Button
 } from "../MaterialTailwind";
 import { EyeSlashIcon, EyeIcon } from "@heroicons/react/24/solid";
 
