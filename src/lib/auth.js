@@ -1,14 +1,21 @@
 import { NextAuthOptions } from "next-auth";
+import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
-const { compare } = require('bcrypt');
-const prisma = require('./prisma');
+import {compare} from 'bcrypt';
+import prisma from "./prisma";
 
-const authConfig = {
+export const authConfig = {
   providers: [
-    {
-      id: 'credentials',
-      name: 'Sign in',
+    CredentialsProvider({
+      name: "Sign in",
       credentials: {
+        email: {
+          label: "Email",
+          type: "email",
+          placeholder: "example@example.com",
+        },
+        password: { label: "Password", type: "password" },
+      },
         async authorize(credentials) {
           if (!credentials || !credentials.email || !credentials.password)
             return null;
@@ -17,6 +24,7 @@ const authConfig = {
           const dbUser = await prisma.user.findUnique({
             where: { email: credentials.email },
           });
+
 
           if (!dbUser) {
             return null; // El usuario no existe
@@ -38,8 +46,7 @@ const authConfig = {
           console.log(userWithoutPassword);
           return userWithoutPassword;
         },
-      },
-    },
+    }),
   ],
   secret: process.env.NEXTAUTH_SECRET,
   session: {
@@ -64,4 +71,4 @@ const authConfig = {
   },
 };
 
-module.exports = authConfig;
+export default NextAuth(authConfig)
