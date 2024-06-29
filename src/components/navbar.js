@@ -7,7 +7,7 @@ import {
   Button,
   IconButton,
   Typography,
-} from "@material-tailwind/react";
+} from "../components/MaterialTailwind";
 import {
   StarIcon,
   LanguageIcon,
