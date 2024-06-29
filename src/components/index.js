@@ -6,3 +6,6 @@ export * from "./signin/signin";
 export * from "./signup/signup";
 export * from "./searchbar";
 export * from "./words/WordPage";
+export * from "./Lists/ListCard";
+export * from "./Lists/ListUI";
+export * from "./Lists/NewList";
