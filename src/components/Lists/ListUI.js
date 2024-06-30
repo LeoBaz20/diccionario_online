@@ -39,11 +39,11 @@ export function ListUI(){
   };
 
   return (
-    <div className="min-h-screen bg-white p-10">
+    <div className="min-h-screen bg-white p-6">
       <main className="max-w-2xl mx-auto">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold">MIS LISTAS</h1>
-          <Button color="black" onClick={handleOpen}>Nueva Lista</Button>
+          <Button color="black" variant="filled" size="sm" onClick={handleOpen}>Nueva Lista</Button>
           <Dialog
                   size="xs"
                   open={open}

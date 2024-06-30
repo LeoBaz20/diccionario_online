@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ArrowsRightLeftIcon } from '@heroicons/react/24/solid';
-import { Menu, MenuHandler, MenuList, MenuItem, Button} from "../MaterialTailwind";
+import { Menu, MenuHandler, MenuList, MenuItem, Button, Sidebar} from "../MaterialTailwind";
 
 const languages = [
   { "code": "BG", "name": "Búlgaro" },
@@ -75,12 +75,18 @@ export function TranslateUI() {
   const [targetLanguage, setTargetLanguage] = useState("ES");
   const [inputText, setInputText] = useState("");
   const [translatedText, setTranslatedText] = useState("");
+  const [savedTranslations, setSavedTranslations] = useState([]);
+  const [showSavedTranslations, setShowSavedTranslations] = useState(false);
 
 
   const handleSwapLanguages = () => {
     const temp = sourceLanguage;
     setSourceLanguage(targetLanguage);
     setTargetLanguage(temp);
+  };
+
+  const toggleSavedTranslations = () => {
+    setShowSavedTranslations(!showSavedTranslations);
   };
 
   const handleTranslate = async () => {
@@ -107,6 +113,8 @@ export function TranslateUI() {
       console.error('Error al traducir el texto:', error);
     }
   };
+
+  
 
   return (
     <div className="flex flex-col items-center min-h-screen bg-gray-100 p-8">
@@ -154,7 +162,7 @@ export function TranslateUI() {
 
         <div className="flex flex-col md:flex-row md:space-y-0 md:space-x-4">
           <textarea
-            className="w-full md:w-1/2 h-80 p-4 mb-4 border border-gray-300 rounded-lg resize-none"
+            className="w-full md:w-1/2 h-80 p-4 mb-4 border border-gray-300 rounded-lg resize-none focus:border-blue-300"
             placeholder="Ingrese el texto a traducir"
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
@@ -171,6 +179,7 @@ export function TranslateUI() {
         >
           Traducir
         </button>
+        
       </div>
     </div>
   );

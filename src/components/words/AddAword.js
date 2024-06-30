@@ -5,11 +5,14 @@ import {
     CardBody,
     CardFooter,
     Typography,
+    Select,
+    Option
   } from "../MaterialTailwind";
   import React, { useEffect, useState } from "react";
   import { useSession } from 'next-auth/react';
   import { toast } from 'react-toastify';
-  
+  import Link from "next/link";
+
   
   export function AddWord({word, onClose}) {
     const { data: session } = useSession();
@@ -34,15 +37,22 @@ import {
       fetchLists();
     }, [session]);
   
+    const handleChange = (event) => {
+      const selectedId = parseInt(event.target.value, 10);
+      setSelectedList(selectedId);
+    };
   
     const handleSubmit = async (e) => {
       e.preventDefault();
+
+      console.log(selectedList);
   
       if (!selectedList) {
         alert('Please select a list.');
         return;
       }
   
+      
       try {
         const response = await fetch('/api/words/create', {
           method: 'POST',
@@ -64,12 +74,7 @@ import {
         toast.error('Error al añadir a la lista: ' + error.message);
       }
     };
-  
-    const handleChange = (event) => {
-      const selectedId = parseInt(event.target.value, 10);
-      setSelectedList(selectedId);
-    };
-  
+
     return (
       <>
         <Card className="mx-auto w-full max-w-[24rem]">
@@ -83,24 +88,26 @@ import {
           </CardHeader>
           <CardBody className="flex flex-col gap-4">
             <form onSubmit={handleSubmit}>
-              <select
-                value={selectedList}
-                onChange={handleChange}
-                className="block appearance-none w-full bg-white border border-gray-300 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
-              >
-                {lists.map((list) => (
-                  <option key={list.id} value={list.id}>
-                    {list.name}
-                  </option>
-                ))}
-              </select>
+            <select
+              value={selectedList}
+              onChange={handleChange}
+              className="block appearance-none w-full bg-white border border-gray-300 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+            >
+              {lists.map((list) => (
+                <option key={list.id} value={list.id}>
+                  {list.name}
+                </option>
+              ))}
+            </select>
               <CardFooter className="mt-4">
                 <Button className="mb-4" type="submit" color="black" fullWidth>
                   Añadir Palabra
                 </Button>
-                <Button color="blue" fullWidth>
-                  Nueva Lista
-                </Button>
+                <Link href="/Lists">
+                  <Button color="blue" fullWidth>
+                    Nueva Lista
+                  </Button>
+              </Link>
               </CardFooter>
             </form>
           </CardBody>
