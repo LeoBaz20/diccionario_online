@@ -15,7 +15,7 @@ const ListCard = ({ id, name, wordCount, onClick }) => {
 
   return (
     <Card  className="bg-blue-500 text-white relative mb-4">
-      <CardBody onClick={() => onClick(id)}>
+      <CardBody onClick={() => onClick(id)} style={{ cursor: 'pointer' }}>
         <Typography variant="h5" color="white" className="mb-8">
           {name}
         </Typography>
