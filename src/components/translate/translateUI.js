@@ -8,8 +8,8 @@ const languages = [
   { "code": "DA", "name": "Danés" },
   { "code": "DE", "name": "Alemán" },
   { "code": "EL", "name": "Griego" },
-  { "code": "EN-GB", "name": "Inglés (Británico)" },
-  { "code": "EN-US", "name": "Inglés (Americano)" },
+  { "code": "EN-GB", "name": "Inglés (UK)" },
+  { "code": "EN-US", "name": "Inglés (EEUU)" },
   { "code": "ES", "name": "Español" },
   { "code": "ET", "name": "Estonio" },
   { "code": "FI", "name": "Finlandés" },
@@ -21,11 +21,11 @@ const languages = [
   { "code": "KO", "name": "Coreano" },
   { "code": "LT", "name": "Lituano" },
   { "code": "LV", "name": "Letón" },
-  { "code": "NB", "name": "Noruego (Bokmål)" },
+  { "code": "NB", "name": "Noruego" },
   { "code": "NL", "name": "Neerlandés" },
   { "code": "PL", "name": "Polaco" },
-  { "code": "PT-BR", "name": "Portugués (Brasil)" },
-  { "code": "PT-PT", "name": "Portugués (Europa)" },
+  { "code": "PT-BR", "name": "Portugués (BR)" },
+  { "code": "PT-PT", "name": "Portugués" },
   { "code": "RO", "name": "Rumano" },
   { "code": "RU", "name": "Ruso" },
   { "code": "SK", "name": "Eslovaco" },
@@ -33,7 +33,7 @@ const languages = [
   { "code": "SV", "name": "Sueco" },
   { "code": "TR", "name": "Turco" },
   { "code": "UK", "name": "Ucraniano" },
-  { "code": "ZH", "name": "Chino (Simplificado)" }
+  { "code": "ZH", "name": "Chino" }
 ];
 
 const targetLanguages = [
@@ -42,8 +42,8 @@ const targetLanguages = [
   { "code": "DA", "name": "Danés" },
   { "code": "DE", "name": "Alemán" },
   { "code": "EL", "name": "Griego" },
-  { "code": "EN-GB", "name": "Inglés (Británico)" },
-  { "code": "EN-US", "name": "Inglés (Americano)" },
+  { "code": "EN-GB", "name": "Inglés (UK)" },
+  { "code": "EN-US", "name": "Inglés (EEUU)" },
   { "code": "ES", "name": "Español" },
   { "code": "ET", "name": "Estonio" },
   { "code": "FI", "name": "Finlandés" },
@@ -55,11 +55,11 @@ const targetLanguages = [
   { "code": "KO", "name": "Coreano" },
   { "code": "LT", "name": "Lituano" },
   { "code": "LV", "name": "Letón" },
-  { "code": "NB", "name": "Noruego (Bokmål)" },
+  { "code": "NB", "name": "Noruego" },
   { "code": "NL", "name": "Neerlandés" },
   { "code": "PL", "name": "Polaco" },
-  { "code": "PT-BR", "name": "Portugués (Brasil)" },
-  { "code": "PT-PT", "name": "Portugués (Europa)" },
+  { "code": "PT-BR", "name": "Portugués (BR)" },
+  { "code": "PT-PT", "name": "Portugués" },
   { "code": "RO", "name": "Rumano" },
   { "code": "RU", "name": "Ruso" },
   { "code": "SK", "name": "Eslovaco" },
@@ -67,7 +67,7 @@ const targetLanguages = [
   { "code": "SV", "name": "Sueco" },
   { "code": "TR", "name": "Turco" },
   { "code": "UK", "name": "Ucraniano" },
-  { "code": "ZH", "name": "Chino (Simplificado)" }
+  { "code": "ZH", "name": "Chino" }
 ];
 
 export function TranslateUI() {
@@ -112,17 +112,16 @@ export function TranslateUI() {
   
 
   return (
-<div className="flex flex-col items-center min-h-screen bg-gray-100 p-4 md:p-8">
     <div className="w-full max-w-7xl p-5 bg-white border border-gray-200 rounded-lg shadow-md">
       <div className="flex flex-col w-full space-y-4 md:space-y-0 md:flex-row md:space-x-4">
         <div className="flex w-full space-x-4">
           <Menu className="w-full">
             <MenuHandler>
-              <Button className="w-full h-12" variant="text">
+              <Button className="w-full h-12 text-left" variant="text">
                 {sourceLanguage === "detect" ? "Detectar Idioma" : languages.find(lang => lang.code === sourceLanguage).name}
               </Button>
             </MenuHandler>
-            <MenuList className="absolute top-0 left-0 w-screen h-screen bg-white md:grid md:grid-cols-3 md:w-auto md:h-auto md:bg-white md:relative md:top-auto md:left-auto">
+            <MenuList className="grid grid-cols-2 md:grid-cols-3 gap-3 w-full md:w-auto">
               <MenuItem onClick={() => setSourceLanguage("detect")}>Detectar Idioma</MenuItem>
               {languages.map(lang => (
                 <MenuItem key={lang.code} onClick={() => setSourceLanguage(lang.code)}>
@@ -142,11 +141,11 @@ export function TranslateUI() {
 
           <Menu className="w-full">
             <MenuHandler>
-              <Button className="w-full h-12" variant="text">
+              <Button className="w-full h-12 text-left " variant="text">
                 {targetLanguages.find(lang => lang.code === targetLanguage).name}
               </Button>
             </MenuHandler>
-            <MenuList className="absolute top-0 left-0 w-screen h-screen bg-white md:grid md:grid-cols-3 md:w-auto md:h-auto md:bg-white md:relative md:top-auto md:left-auto">
+            <MenuList className="grid grid-cols-2 md:grid-cols-3 gap-3 w-full md:w-auto">
               {targetLanguages.map(lang => (
                 <MenuItem key={lang.code} onClick={() => setTargetLanguage(lang.code)}>
                   {lang.name}
@@ -177,7 +176,6 @@ export function TranslateUI() {
           Traducir
         </button>
       </div>
-    </div>
   );
 }
 

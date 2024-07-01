@@ -5,6 +5,7 @@ export * from "./footer";
 export * from "./signin/signin";
 export * from "./signup/signup";
 export * from "./translate/translateUI";
+export * from "./translate/translateFavs";
 export * from "./searchbar";
 export * from "./words/WordPage";
 export * from "./Lists/ListCard";

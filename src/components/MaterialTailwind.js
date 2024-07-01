@@ -28,7 +28,9 @@ import {
     DialogBody,
     DialogFooter,
     Breadcrumbs,
-    Sidebar,
+    Accordion,
+    AccordionBody,
+    AccordionHeader
   } from "@material-tailwind/react";
   
   export {
@@ -59,5 +61,7 @@ import {
     DialogBody,
     DialogFooter,
     Breadcrumbs,
-    Sidebar,
+    Accordion,
+    AccordionBody,
+    AccordionHeader
   } 
