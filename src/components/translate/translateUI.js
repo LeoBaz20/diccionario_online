@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ArrowsRightLeftIcon } from '@heroicons/react/24/solid';
+import { ArrowsRightLeftIcon, ChevronDownIcon } from '@heroicons/react/24/solid';
 import { Menu, MenuHandler, MenuList, MenuItem, Button, Sidebar} from "../MaterialTailwind";
 
 const languages = [
@@ -75,8 +75,6 @@ export function TranslateUI() {
   const [targetLanguage, setTargetLanguage] = useState("ES");
   const [inputText, setInputText] = useState("");
   const [translatedText, setTranslatedText] = useState("");
-  const [savedTranslations, setSavedTranslations] = useState([]);
-  const [showSavedTranslations, setShowSavedTranslations] = useState(false);
 
 
   const handleSwapLanguages = () => {
@@ -85,9 +83,6 @@ export function TranslateUI() {
     setTargetLanguage(temp);
   };
 
-  const toggleSavedTranslations = () => {
-    setShowSavedTranslations(!showSavedTranslations);
-  };
 
   const handleTranslate = async () => {
     try {
@@ -117,16 +112,17 @@ export function TranslateUI() {
   
 
   return (
-    <div className="flex flex-col items-center min-h-screen bg-gray-100 p-8">
-      <div className="w-full max-w-7xl p-5 bg-white border border-gray-200 rounded-lg shadow-md">
-        <div className="flex flex-col md:flex-row md:space-x-4">
-          <Menu>
+<div className="flex flex-col items-center min-h-screen bg-gray-100 p-4 md:p-8">
+    <div className="w-full max-w-7xl p-5 bg-white border border-gray-200 rounded-lg shadow-md">
+      <div className="flex flex-col w-full space-y-4 md:space-y-0 md:flex-row md:space-x-4">
+        <div className="flex w-full space-x-4">
+          <Menu className="w-full">
             <MenuHandler>
-              <Button className="w-full md:w-1/2 h-12 border-gray-300" variant="outlined">
+              <Button className="w-full h-12" variant="text">
                 {sourceLanguage === "detect" ? "Detectar Idioma" : languages.find(lang => lang.code === sourceLanguage).name}
               </Button>
             </MenuHandler>
-            <MenuList className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <MenuList className="absolute top-0 left-0 w-screen h-screen bg-white md:grid md:grid-cols-3 md:w-auto md:h-auto md:bg-white md:relative md:top-auto md:left-auto">
               <MenuItem onClick={() => setSourceLanguage("detect")}>Detectar Idioma</MenuItem>
               {languages.map(lang => (
                 <MenuItem key={lang.code} onClick={() => setSourceLanguage(lang.code)}>
@@ -137,20 +133,20 @@ export function TranslateUI() {
           </Menu>
 
           <button
-            className="flex items-center justify-center flex-shrink-0 w-12 h-12 p-2 mb-4 ml-auto text-black bg-white rounded-lg hover:bg-stone-50"
+            className="flex items-center justify-center w-full h-12 p-2 text-black bg-white rounded-lg hover:bg-stone-50 md:w-auto"
             onClick={handleSwapLanguages}
             disabled={sourceLanguage === "detect"}
           >
-            <ArrowsRightLeftIcon className="w-6 h-6" />
+            <ArrowsRightLeftIcon className="w-5 h-5" />
           </button>
 
-          <Menu>
+          <Menu className="w-full">
             <MenuHandler>
-              <Button className="w-full md:w-1/2 h-12 border-gray-300" variant="outlined">
+              <Button className="w-full h-12" variant="text">
                 {targetLanguages.find(lang => lang.code === targetLanguage).name}
               </Button>
             </MenuHandler>
-            <MenuList className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <MenuList className="absolute top-0 left-0 w-screen h-screen bg-white md:grid md:grid-cols-3 md:w-auto md:h-auto md:bg-white md:relative md:top-auto md:left-auto">
               {targetLanguages.map(lang => (
                 <MenuItem key={lang.code} onClick={() => setTargetLanguage(lang.code)}>
                   {lang.name}
@@ -159,16 +155,17 @@ export function TranslateUI() {
             </MenuList>
           </Menu>
         </div>
-
-        <div className="flex flex-col md:flex-row md:space-y-0 md:space-x-4">
+      </div>
+      
+        <div className="flex flex-col mt-4 md:flex-row md:space-x-4">
           <textarea
-            className="w-full md:w-1/2 h-80 p-4 mb-4 border border-gray-300 rounded-lg resize-none focus:border-blue-300"
+            className="w-full h-40 p-4 mb-4 border border-gray-300 rounded-lg resize-none md:w-1/2 md:h-60"
             placeholder="Ingrese el texto a traducir"
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
           ></textarea>
           <textarea
-            className="w-full md:w-1/2 h-80 p-4 mb-4 border border-gray-300 rounded-lg resize-none"
+            className="w-full h-40 p-4 mb-4 bg-gray-100 rounded-lg resize-none md:w-1/2 md:h-60"
             readOnly
             value={translatedText}
           ></textarea>
@@ -179,7 +176,6 @@ export function TranslateUI() {
         >
           Traducir
         </button>
-        
       </div>
     </div>
   );
