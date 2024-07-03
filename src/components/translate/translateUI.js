@@ -1,74 +1,8 @@
 import { useState, useRef } from "react";
 import { ArrowsRightLeftIcon, ClipboardDocumentCheckIcon, SpeakerWaveIcon } from '@heroicons/react/24/solid';
-import { Menu, MenuHandler, MenuList, MenuItem, Button, IconButton, Popover, PopoverHandler, PopoverContent } from "../MaterialTailwind";
+import { Menu, MenuHandler, MenuList, MenuItem, Button, IconButton, Tooltip } from "../MaterialTailwind";
+import { languages, targetLanguages, languageToVoiceMap } from "@/lib/languajeData";
 
-const languages = [
-  { "code": "BG", "name": "Búlgaro" },
-  { "code": "CS", "name": "Checo" },
-  { "code": "DA", "name": "Danés" },
-  { "code": "DE", "name": "Alemán" },
-  { "code": "EL", "name": "Griego" },
-  { "code": "EN-GB", "name": "Inglés (UK)" },
-  { "code": "EN-US", "name": "Inglés (EEUU)" },
-  { "code": "ES", "name": "Español" },
-  { "code": "ET", "name": "Estonio" },
-  { "code": "FI", "name": "Finlandés" },
-  { "code": "FR", "name": "Francés" },
-  { "code": "HU", "name": "Húngaro" },
-  { "code": "ID", "name": "Indonesio" },
-  { "code": "IT", "name": "Italiano" },
-  { "code": "JA", "name": "Japonés" },
-  { "code": "KO", "name": "Coreano" },
-  { "code": "LT", "name": "Lituano" },
-  { "code": "LV", "name": "Letón" },
-  { "code": "NB", "name": "Noruego" },
-  { "code": "NL", "name": "Neerlandés" },
-  { "code": "PL", "name": "Polaco" },
-  { "code": "PT-BR", "name": "Portugués (BR)" },
-  { "code": "PT-PT", "name": "Portugués" },
-  { "code": "RO", "name": "Rumano" },
-  { "code": "RU", "name": "Ruso" },
-  { "code": "SK", "name": "Eslovaco" },
-  { "code": "SL", "name": "Esloveno" },
-  { "code": "SV", "name": "Sueco" },
-  { "code": "TR", "name": "Turco" },
-  { "code": "UK", "name": "Ucraniano" },
-  { "code": "ZH", "name": "Chino" }
-];
-
-const targetLanguages = [
-  { "code": "BG", "name": "Búlgaro" },
-  { "code": "CS", "name": "Checo" },
-  { "code": "DA", "name": "Danés" },
-  { "code": "DE", "name": "Alemán" },
-  { "code": "EL", "name": "Griego" },
-  { "code": "EN-GB", "name": "Inglés (UK)" },
-  { "code": "EN-US", "name": "Inglés (EEUU)" },
-  { "code": "ES", "name": "Español" },
-  { "code": "ET", "name": "Estonio" },
-  { "code": "FI", "name": "Finlandés" },
-  { "code": "FR", "name": "Francés" },
-  { "code": "HU", "name": "Húngaro" },
-  { "code": "ID", "name": "Indonesio" },
-  { "code": "IT", "name": "Italiano" },
-  { "code": "JA", "name": "Japonés" },
-  { "code": "KO", "name": "Coreano" },
-  { "code": "LT", "name": "Lituano" },
-  { "code": "LV", "name": "Letón" },
-  { "code": "NB", "name": "Noruego" },
-  { "code": "NL", "name": "Neerlandés" },
-  { "code": "PL", "name": "Polaco" },
-  { "code": "PT-BR", "name": "Portugués (BR)" },
-  { "code": "PT-PT", "name": "Portugués" },
-  { "code": "RO", "name": "Rumano" },
-  { "code": "RU", "name": "Ruso" },
-  { "code": "SK", "name": "Eslovaco" },
-  { "code": "SL", "name": "Esloveno" },
-  { "code": "SV", "name": "Sueco" },
-  { "code": "TR", "name": "Turco" },
-  { "code": "UK", "name": "Ucraniano" },
-  { "code": "ZH", "name": "Chino" }
-];
 
 export function TranslateUI() {
   const [sourceLanguage, setSourceLanguage] = useState("detect");
@@ -114,17 +48,30 @@ export function TranslateUI() {
   const handleCopyToClipboard = () => {
     if (textareaRef.current) {
       textareaRef.current.select();
-      navigator.clipboard.writeText(textareaRef.current.value)
-        .then(() => {
-          console.log('Texto copiado al portapapeles');
-          setCopied(true); // Mostrar el mensaje de éxito
-          setTimeout(() => {
-            setCopied(false); // Ocultar el mensaje después de unos segundos
-          }, 3000); // 3 segundos
-        })
-        .catch(err => {
-          console.error('Error al intentar copiar al portapapeles:', err);
-        });
+      document.execCommand('copy');
+    }
+  };
+
+  const handleSpeak = () => {
+    if (textareaRef.current) {
+      const textToSpeak = new SpeechSynthesisUtterance(textareaRef.current.value);
+
+      // Obtener todas las voces disponibles
+      const voices = window.speechSynthesis.getVoices();
+
+      // Encontrar la voz que coincida con el código de idioma objetivo
+      const voiceName = languageToVoiceMap[targetLanguage];
+      const targetVoice = voices.find(voice => voice.name === voiceName);
+
+      // Configurar la voz del texto a hablar
+      if (targetVoice) {
+        textToSpeak.voice = targetVoice;
+      } else {
+        console.warn(`No se encontró una voz para el idioma ${targetLanguage}. Se utilizará la voz predeterminada.`);
+      }
+
+      // Hablar el texto
+      window.speechSynthesis.speak(textToSpeak);
     }
   };
 
@@ -198,19 +145,16 @@ export function TranslateUI() {
             value={translatedText}
           ></textarea>
           <div className="flex justify-end md:visible md:h-4">
-            <Popover>
-              <PopoverHandler>
-                <IconButton onClick={handleCopyToClipboard} size="lg" variant="text" color="blue-gray">
-                  <ClipboardDocumentCheckIcon className="w-5 h-5" />
-                </IconButton>
-              </PopoverHandler>
-              <PopoverContent>
-                Traducción Copiada
-              </PopoverContent>
-            </Popover>
-            <IconButton size="lg" variant="text" color="blue-gray">
+            <Tooltip content="Copiar" className="border border-blue-gray-50 bg-white text-black">
+              <IconButton onClick={handleCopyToClipboard} size="lg" variant="text" color="blue-gray">
+                <ClipboardDocumentCheckIcon className="w-5 h-5" />
+              </IconButton>
+            </Tooltip>
+            <Tooltip content="Reproducir" className="border border-blue-gray-50 bg-white text-black">
+            <IconButton onClick={handleSpeak} size="lg" variant="text" color="blue-gray">
               <SpeakerWaveIcon className="w-5 h-5" />
             </IconButton>
+            </Tooltip>
           </div>
         </div>
       </div>

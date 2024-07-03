@@ -23,13 +23,14 @@ model Word {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  name      String
-  lastname  String
-  email     String   @unique
-  password  String
-  createdAt DateTime @default(now())
-  lists     List[]
+  id          Int                 @id @default(autoincrement())
+  name        String
+  lastname    String
+  email       String              @unique
+  password    String
+  createdAt   DateTime            @default(now())
+  lists       List[]
+  translations SavedTranslation[] @relation("UserTranslations")
 }
 
 model List {
@@ -39,4 +40,15 @@ model List {
   userId    Int
   createdBy User     @relation(fields: [userId], references: [id])
   words     Word[]
+}
+
+model SavedTranslation {
+  id            Int      @id @default(autoincrement())
+  originalText  String
+  translatedText String
+  sourceLanguage String
+  targetLanguage String
+  userId        Int
+  user          User     @relation(fields: [userId], references: [id], name: "UserTranslations")
+  createdAt     DateTime @default(now())
 }
