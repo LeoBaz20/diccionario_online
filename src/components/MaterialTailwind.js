@@ -30,7 +30,10 @@ import {
     Breadcrumbs,
     Accordion,
     AccordionBody,
-    AccordionHeader
+    AccordionHeader,
+    Popover,
+    PopoverHandler,
+    PopoverContent,
   } from "@material-tailwind/react";
   
   export {
@@ -63,5 +66,8 @@ import {
     Breadcrumbs,
     Accordion,
     AccordionBody,
-    AccordionHeader
+    AccordionHeader,
+    Popover,
+    PopoverHandler,
+    PopoverContent,
   } 

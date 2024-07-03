@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { ArrowsRightLeftIcon, ChevronDownIcon } from '@heroicons/react/24/solid';
-import { Menu, MenuHandler, MenuList, MenuItem, Button, Sidebar} from "../MaterialTailwind";
+import { useState, useRef } from "react";
+import { ArrowsRightLeftIcon, ClipboardDocumentCheckIcon, SpeakerWaveIcon } from '@heroicons/react/24/solid';
+import { Menu, MenuHandler, MenuList, MenuItem, Button, IconButton, Popover, PopoverHandler, PopoverContent } from "../MaterialTailwind";
 
 const languages = [
   { "code": "BG", "name": "Búlgaro" },
@@ -75,6 +75,8 @@ export function TranslateUI() {
   const [targetLanguage, setTargetLanguage] = useState("ES");
   const [inputText, setInputText] = useState("");
   const [translatedText, setTranslatedText] = useState("");
+  const textareaRef = useRef(null);
+  const [copied, setCopied] = useState(false);
 
 
   const handleSwapLanguages = () => {
@@ -109,20 +111,38 @@ export function TranslateUI() {
     }
   };
 
-  
+  const handleCopyToClipboard = () => {
+    if (textareaRef.current) {
+      textareaRef.current.select();
+      navigator.clipboard.writeText(textareaRef.current.value)
+        .then(() => {
+          console.log('Texto copiado al portapapeles');
+          setCopied(true); // Mostrar el mensaje de éxito
+          setTimeout(() => {
+            setCopied(false); // Ocultar el mensaje después de unos segundos
+          }, 3000); // 3 segundos
+        })
+        .catch(err => {
+          console.error('Error al intentar copiar al portapapeles:', err);
+        });
+    }
+  };
 
   return (
     <div className="w-full max-w-7xl p-5 bg-white border border-gray-200 rounded-lg shadow-md">
       <div className="flex flex-col w-full space-y-4 md:space-y-0 md:flex-row md:space-x-4">
         <div className="flex w-full space-x-4">
-          <Menu className="w-full">
+          <Menu className="w-full" animate={{
+            mount: { y: 0 },
+            unmount: { y: 25 },
+          }}>
             <MenuHandler>
-              <Button className="w-full h-12 text-left" variant="text">
+              <Button className="w-full h-12 text-left" color="blue-gray" variant="text">
                 {sourceLanguage === "detect" ? "Detectar Idioma" : languages.find(lang => lang.code === sourceLanguage).name}
               </Button>
             </MenuHandler>
             <MenuList className="grid grid-cols-2 md:grid-cols-3 gap-3 w-full md:w-auto">
-              <MenuItem onClick={() => setSourceLanguage("detect")}>Detectar Idioma</MenuItem>
+              <MenuItem onClick={() => setSourceLanguage("detect")} href="#">Detectar Idioma</MenuItem>
               {languages.map(lang => (
                 <MenuItem key={lang.code} onClick={() => setSourceLanguage(lang.code)}>
                   {lang.name}
@@ -136,12 +156,15 @@ export function TranslateUI() {
             onClick={handleSwapLanguages}
             disabled={sourceLanguage === "detect"}
           >
-            <ArrowsRightLeftIcon className="w-5 h-5" />
+            <ArrowsRightLeftIcon color="blue-gray" className="w-5 h-5" />
           </button>
 
-          <Menu className="w-full">
+          <Menu className="w-full" animate={{
+            mount: { y: 0 },
+            unmount: { y: 25 },
+          }}>
             <MenuHandler>
-              <Button className="w-full h-12 text-left " variant="text">
+              <Button className="w-full h-12 text-left" color="blue-gray" variant="text">
                 {targetLanguages.find(lang => lang.code === targetLanguage).name}
               </Button>
             </MenuHandler>
@@ -155,28 +178,52 @@ export function TranslateUI() {
           </Menu>
         </div>
       </div>
-      
-        <div className="flex flex-col mt-4 md:flex-row md:space-x-4">
+
+      <div className="flex flex-col mt-4 md:flex-row md:space-x-4">
+        <div className="w-full md:w-1/2">
           <textarea
-            className="w-full h-40 p-4 mb-4 border border-gray-300 rounded-lg resize-none md:w-1/2 md:h-60"
+            className="w-full h-40 p-4 mb-4 border border-gray-300 rounded resize-none md:h-60"
             placeholder="Ingrese el texto a traducir"
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
           ></textarea>
+          <div className="invisible md:visible md:h-4"></div>
+        </div>
+
+        <div className="w-full md:w-1/2">
           <textarea
-            className="w-full h-40 p-4 mb-4 bg-gray-100 rounded-lg resize-none md:w-1/2 md:h-60"
+            ref={textareaRef}
+            className="w-full h-40 p-4 bg-gray-100 rounded resize-none md:h-60"
             readOnly
             value={translatedText}
           ></textarea>
+          <div className="flex justify-end md:visible md:h-4">
+            <Popover>
+              <PopoverHandler>
+                <IconButton onClick={handleCopyToClipboard} size="lg" variant="text" color="blue-gray">
+                  <ClipboardDocumentCheckIcon className="w-5 h-5" />
+                </IconButton>
+              </PopoverHandler>
+              <PopoverContent>
+                Traducción Copiada
+              </PopoverContent>
+            </Popover>
+            <IconButton size="lg" variant="text" color="blue-gray">
+              <SpeakerWaveIcon className="w-5 h-5" />
+            </IconButton>
+          </div>
         </div>
-        <button
-          className="w-full px-4 py-2 font-semibold text-white bg-blue-500 rounded-lg hover:bg-blue-600"
-          onClick={handleTranslate}
-        >
-          Traducir
-        </button>
       </div>
+
+      <button
+        className="w-full px-4 py-2 mt-5 font-semibold text-white bg-blue-500 rounded-lg hover:bg-blue-600"
+        onClick={handleTranslate}
+      >
+        Traducir
+      </button>
+    </div>
   );
+
 }
 
 export default TranslateUI;
