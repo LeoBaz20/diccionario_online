@@ -34,6 +34,7 @@ import {
     Popover,
     PopoverHandler,
     PopoverContent,
+    Tooltip
   } from "@material-tailwind/react";
   
   export {
@@ -70,4 +71,5 @@ import {
     Popover,
     PopoverHandler,
     PopoverContent,
+    Tooltip
   } 
