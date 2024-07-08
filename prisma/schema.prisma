@@ -15,6 +15,7 @@ datasource db {
 }
 
 
+
 model Word {
   id        Int      @id @default(autoincrement())
   word      String
