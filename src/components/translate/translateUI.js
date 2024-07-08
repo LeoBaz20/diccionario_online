@@ -1,16 +1,23 @@
 import { useState, useRef } from "react";
-import { ArrowsRightLeftIcon, ClipboardDocumentCheckIcon, SpeakerWaveIcon } from '@heroicons/react/24/solid';
+import { ArrowsRightLeftIcon, ClipboardDocumentCheckIcon, SpeakerWaveIcon, HeartIcon } from '@heroicons/react/24/solid';
+import { HeartIcon as OTHeartIcon } from '@heroicons/react/24/outline';
+import { useRouter } from "next/navigation";
+import { useSession } from 'next-auth/react';
 import { Menu, MenuHandler, MenuList, MenuItem, Button, IconButton, Tooltip } from "../MaterialTailwind";
 import { languages, targetLanguages, languageToVoiceMap } from "@/lib/languajeData";
+import { useTranslate } from "@/contexts/contextTranslation";
 
 
 export function TranslateUI() {
+  const { data: session } = useSession();
   const [sourceLanguage, setSourceLanguage] = useState("detect");
   const [targetLanguage, setTargetLanguage] = useState("ES");
   const [inputText, setInputText] = useState("");
   const [translatedText, setTranslatedText] = useState("");
+  const [isSaved, setIsSaved] = useState(false);
+  const { addTranslation } = useTranslate();
+  const router = useRouter();
   const textareaRef = useRef(null);
-  const [copied, setCopied] = useState(false);
 
 
   const handleSwapLanguages = () => {
@@ -18,7 +25,6 @@ export function TranslateUI() {
     setSourceLanguage(targetLanguage);
     setTargetLanguage(temp);
   };
-
 
   const handleTranslate = async () => {
     try {
@@ -37,6 +43,7 @@ export function TranslateUI() {
       const data = await response.json();
       if (response.ok) {
         setTranslatedText(data.translatedText);
+        setIsSaved(false);
       } else {
         console.error('Error:', data.error);
       }
@@ -72,6 +79,48 @@ export function TranslateUI() {
 
       // Hablar el texto
       window.speechSynthesis.speak(textToSpeak);
+    }
+  };
+
+  const handleSaveTranslation = async () => {
+
+    if (!session) {
+      router.push('/signin'); // Redirigir al inicio de sesión si no está autenticado
+    }
+
+    // Proceder con el guardado si la sesión está activa
+    if (!isSaved) {
+      try {
+        const response = await fetch('/api/translatedtext/create', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            sourceLanguage,
+            targetLanguage,
+            inputText,
+            translatedText,
+          }),
+        });
+        const data = await response.json();
+        if (response.ok) {
+          setIsSaved(true);
+          const translation = {
+            id: data.id, // Ajusta según el ID devuelto por tu API
+            sourceLanguage,
+            targetLanguage,
+            originalText: inputText,
+            translatedText,
+          };
+          addTranslation(translation);
+          console.log('Traducción guardada:', data);
+        } else {
+          console.error('Error al guardar la traducción:', data.error);
+        }
+      } catch (error) {
+        console.error('Error al guardar la traducción:', error);
+      }
     }
   };
 
@@ -145,15 +194,26 @@ export function TranslateUI() {
             value={translatedText}
           ></textarea>
           <div className="flex justify-end md:visible md:h-4">
+            <Tooltip content="Guardar" className="border border-blue-gray-50 bg-white text-black">
+              <IconButton
+                size="lg"
+                variant="text"
+                color="blue-gray"
+                onClick={handleSaveTranslation}
+                disabled={isSaved}
+              >
+                {isSaved ? <HeartIcon className="w-5 h-5" /> : <OTHeartIcon className="w-5 h-5" />}
+              </IconButton>
+            </Tooltip>
             <Tooltip content="Copiar" className="border border-blue-gray-50 bg-white text-black">
               <IconButton onClick={handleCopyToClipboard} size="lg" variant="text" color="blue-gray">
                 <ClipboardDocumentCheckIcon className="w-5 h-5" />
               </IconButton>
             </Tooltip>
             <Tooltip content="Reproducir" className="border border-blue-gray-50 bg-white text-black">
-            <IconButton onClick={handleSpeak} size="lg" variant="text" color="blue-gray">
-              <SpeakerWaveIcon className="w-5 h-5" />
-            </IconButton>
+              <IconButton onClick={handleSpeak} size="lg" variant="text" color="blue-gray">
+                <SpeakerWaveIcon className="w-5 h-5" />
+              </IconButton>
             </Tooltip>
           </div>
         </div>

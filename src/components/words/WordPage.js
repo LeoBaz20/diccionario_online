@@ -4,7 +4,6 @@ import {
   Dialog,
 } from "../MaterialTailwind";
 
-import { SpeakerWaveIcon } from '@heroicons/react/24/solid';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { AddWord } from '@/components/words/AddAword'
