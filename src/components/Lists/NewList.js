@@ -17,7 +17,6 @@ import {
 export function NewList({handleClose}) {
   const [name, setName] = useState('');
   const { data: session } = useSession();
-  const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
