@@ -3,7 +3,7 @@ import { useSession } from "next-auth/react";
 import { Accordion, AccordionHeader, AccordionBody, Typography, IconButton, Tooltip } from "../MaterialTailwind";
 import { languages, targetLanguages } from "@/lib/languajeData";
 import { useTranslate } from "@/contexts/contextTranslation";
-import { HeartIcon } from '@heroicons/react/24/solid';
+import { XCircleIcon } from '@heroicons/react/24/solid';
 import { HeartIcon as OTHeartIcon } from '@heroicons/react/24/outline';
 
 export function TranslateFavs() {
@@ -76,31 +76,35 @@ export function TranslateFavs() {
             Traducciones Guardadas
           </AccordionHeader>
           <AccordionBody>
-            {translations.length > 0 ? (
-              <ul>
-                {translations.map((translation) => (
-                  <li key={translation.id} className="py-2 border-b border-gray-200 flex justify-between items-center">
-                    <div>
-                      <div className="p-2 border border-gray-300 rounded-md mb-2">
-                        {getLanguageName(translation.sourceLanguage, languages)} → {getLanguageName(translation.targetLanguage, targetLanguages)}
+            {session ? (
+              translations.length > 0 ? (
+                <ul>
+                  {translations.map((translation) => (
+                    <li key={translation.id} className="py-2 border-b border-gray-200 flex justify-between items-center">
+                      <div>
+                        <div className="p-2 border border-gray-300 rounded-md mb-2">
+                          {getLanguageName(translation.sourceLanguage, languages)} → {getLanguageName(translation.targetLanguage, targetLanguages)}
+                        </div>
+                        <Typography variant="h6">{translation.originalText}</Typography><br />
+                        <Typography>{translation.translatedText}</Typography><br />
                       </div>
-                      <Typography variant="h6">{translation.originalText}</Typography><br />
-                      <Typography>{translation.translatedText}</Typography><br />
-                    </div>
-                    <Tooltip content="Dejar de guardar" className="border border-blue-gray-50 bg-white text-black">
-                    <IconButton
-                      variant="text"
-                      color="blue"
-                      onClick={() => handleDeleteTranslation(translation.id)} // Agregar función para eliminar la traducción
-                    >
-                     <HeartIcon className="h-5 w-5"/>
-                    </IconButton>
-                    </Tooltip>
-                  </li>
-                ))}
-              </ul>
+                      <Tooltip content="Dejar de guardar" className="border border-blue-gray-50 bg-white text-black">
+                        <IconButton
+                          variant="text"
+                          color="blue"
+                          onClick={() => handleDeleteTranslation(translation.id)}
+                        >
+                          <XCircleIcon className="h-5 w-5"/>
+                        </IconButton>
+                      </Tooltip>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p>No hay traducciones guardadas.</p>
+              )
             ) : (
-              <p>No hay traducciones guardadas.</p>
+              <p>Para guardar traducciones, debe <a href="/signin" className="underline text-blue-600">iniciar sesión</a>.</p>
             )}
           </AccordionBody>
         </Accordion>
