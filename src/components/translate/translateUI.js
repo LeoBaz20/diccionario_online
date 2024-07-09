@@ -200,7 +200,7 @@ export function TranslateUI() {
                 variant="text"
                 color="blue-gray"
                 onClick={handleSaveTranslation}
-                disabled={isSaved}
+                disabled={isSaved || sourceLanguage === "detect"}
               >
                 {isSaved ? <HeartIcon className="w-5 h-5" /> : <OTHeartIcon className="w-5 h-5" />}
               </IconButton>
