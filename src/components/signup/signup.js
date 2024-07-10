@@ -95,7 +95,7 @@ export function Signup() {
             <label htmlFor="name">
               <Typography
                 variant="small"
-                className="mb-2 block font-medium font-bold text-gray-900"
+                className="mb-2 block font-bold text-gray-900"
               >
                 Nombre
               </Typography>
@@ -123,7 +123,7 @@ export function Signup() {
             <label htmlFor="lastname">
               <Typography
                 variant="small"
-                className="mb-2 block font-medium font-bold	text-gray-900"
+                className="mb-2 block font-bold	text-gray-900"
               >
                 Apellido
               </Typography>
